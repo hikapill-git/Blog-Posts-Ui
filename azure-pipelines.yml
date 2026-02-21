@@ -5,40 +5,52 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-# ------------------------------------------------------
-# 1. Install Node.js 20 (Required by your Angular version)
-# ------------------------------------------------------
+# 1. Install Node.js 20 (Required for Angular 17+)
 - task: NodeTool@0
   inputs:
-    versionSpec: '24.x'
-  displayName: 'Install Node.js 24'
+    versionSpec: '20.x'
+  displayName: 'Install Node.js 20'
 
-# ------------------------------------------------------
-# 2. Build the Angular Application
-#    This creates the 'dist' folder
-# ------------------------------------------------------
+# 2. Build the Angular App
 - script: |
     npm install
     npm run build
   displayName: 'Build Angular App'
 
-# ------------------------------------------------------
-# 3. Zip ONLY the built files (CRITICAL FIX)
-#    We look inside 'dist/blob-plateform' and zip those files.
-#    This puts index.html at the TOP of the zip.
-# ------------------------------------------------------
+# 3. THE MAGIC FIX: Flatten the build folder
+#    This script finds the folder inside 'dist' (whatever it is named)
+#    and copies the CONTENT to the staging directory.
+- script: |
+    echo "Files in dist before flattening:"
+    ls -R dist
+    
+    # Go into dist, find the first folder (e.g., blob-plateform), and copy contents out
+    cd dist
+    cd * 
+    # If there is a 'browser' folder (Angular 17+), go inside it
+    if [ -d "browser" ]; then
+      cd browser
+    fi
+    
+    echo "We are now in folder:"
+    pwd
+    echo "Copying files to artifact staging..."
+    
+    # Copy all files (index.html, js, css) to the place where we zip
+    cp -r . $(Build.ArtifactStagingDirectory)
+  displayName: 'Flatten Build Directory'
+
+# 4. Zip the Staging Directory
+#    Now index.html is guaranteed to be at the root of the zip.
 - task: ArchiveFiles@2
   inputs:
-    # CHECK THIS PATH: If your build fails, change this to just 'dist'
-    rootFolderOrFile: 'dist/blob-plateform' 
+    rootFolderOrFile: '$(Build.ArtifactStagingDirectory)'
     includeRootFolder: false
     archiveType: 'zip'
     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
     replaceExistingArchive: true
 
-# ------------------------------------------------------
-# 4. Publish the Artifact for Release
-# ------------------------------------------------------
+# 5. Publish
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
