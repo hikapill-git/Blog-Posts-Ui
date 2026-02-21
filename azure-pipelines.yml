@@ -5,23 +5,30 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-# 1. (Optional) If you need to build code (like React/Angular/.NET), 
-#    uncomment the lines below. If it's just plain JS/Python, skip this.
+# 1. Install Node.js (Good practice to specify version)
+- task: NodeTool@0
+  inputs:
+    versionSpec: '18.x' # Or 16.x, 20.x depending on your Angular version
+  displayName: 'Install Node.js'
+
+# 2. Build the code
 - script: |
     npm install
     npm run build
   displayName: 'Build Angular App'
 
-# 2. Zip the files
+# 3. Zip the files (CRITICAL FIX HERE)
 - task: ArchiveFiles@2
   inputs:
-    rootFolderOrFile: 'dist'
+    # CHANGE THIS: Replace 'your-project-name' with the actual folder name inside dist
+    # Example: 'dist/blob-platform' 
+    rootFolderOrFile: 'dist/blob-plateform' 
     includeRootFolder: false
     archiveType: 'zip'
     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
     replaceExistingArchive: true
 
-# 3. Publish the Zip so the Release Wizard can see it
+# 4. Publish
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
