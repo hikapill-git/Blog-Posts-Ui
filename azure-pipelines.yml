@@ -7,15 +7,15 @@ pool:
 steps:
 # 1. (Optional) If you need to build code (like React/Angular/.NET), 
 #    uncomment the lines below. If it's just plain JS/Python, skip this.
-# - script: |
-#     npm install
-#     npm run build
-#   displayName: 'Build Code'
+- script: |
+    npm install
+    npm run build
+  displayName: 'Build Angular App'
 
 # 2. Zip the files
 - task: ArchiveFiles@2
   inputs:
-    rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+    rootFolderOrFile: 'dist'
     includeRootFolder: false
     archiveType: 'zip'
     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
