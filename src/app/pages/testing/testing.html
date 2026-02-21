@@ -1,0 +1,24 @@
+<form id="firstForm" [formGroup]="userForm">
+  <div>
+    <label for="">Email</label>
+    <input type="text" formControlName="email" appChangeInputBoxColor />
+    @if (userForm.get('email')?.touched) {
+      @if (userForm.get('email')?.errors?.['required']) {
+        <p>Please enter email</p>
+      }
+      @if (userForm.get('email')?.errors?.['email']) {
+        <p>Please enter valid email</p>
+      }
+    }
+    <br />
+    <label for="">UserName</label>
+    <input type="text" formControlName="username" appChangeInputBoxColor />
+    @if (userForm.get('username')?.touched) {
+      @if (userForm.get('username')?.errors?.['required']) {
+        <p>Please enter username</p>
+      }
+    }
+    <br />
+    <button type="submit" [disabled]="userForm.invalid" (click)="onBtnClick()">Submit</button>
+  </div>
+</form>

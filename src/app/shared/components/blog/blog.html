@@ -1,0 +1,56 @@
+<div class="max-w-3xl mx-auto p-6">
+  <!-- Blog Content -->
+  <h1 class="text-3xl font-bold mb-4">{{ (blog$ | async)?.title }}</h1>
+  <p class="text-gray-700 leading-relaxed mb-6">
+    {{ (blog$ | async)?.content }}
+  </p>
+
+  <!-- Like Button -->
+  <button
+    (click)="likePost()"
+    class="flex items-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+      <path
+        d="M3 8a5 5 0 0110 0v1h2a2 2 0 012 2v1a2 2 0 01-2 2h-2v4H7v-4H5a2 2 0 01-2-2V9a2 2 0 012-2h2V8z"
+      />
+    </svg>
+    <span>Like ({{ (blog$ | async)?.likesCount }})</span>
+  </button>
+
+  <!-- Comments Section -->
+  <div class="mt-8">
+    <h2 class="text-2xl font-semibold mb-4">Comments</h2>
+    <div class="space-y-4">
+      <!-- Single Comment -->
+      @if ((blog$ | async)?.comments?.length !== 0) {
+        @for (item of (blog$ | async)?.comments; track $index) {
+          <div class="border rounded-lg p-3">
+            <p class="text-gray-800">{{ item.text }}</p>
+            <span class="text-sm text-gray-500">- {{ item.username }}</span>
+          </div>
+        }
+      }
+
+      <!-- Add Comment Form -->
+
+      <textarea
+        [(ngModel)]="commentText"
+        class="w-full border rounded-lg p-2 mb-2"
+        rows="3"
+        placeholder="Write a comment..."
+      ></textarea>
+      <button
+        (click)="postComment()"
+        class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+      >
+        Post Comment
+      </button>
+    </div>
+    <!-- @if (!isLoggedIn) {
+      <div class="text-red-600 mt-2">Please log in to like or comment.</div>
+    } -->
+  </div>
+</div>
+<!-- Show modal only when needed -->
+<app-confimlogin *ngIf="showConfirm" (closed)="showConfirm = false"></app-confimlogin>

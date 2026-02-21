@@ -1,0 +1,40 @@
+<!-- Header -->
+<header class="bg-blue-600 text-white p-4">
+  <div class="container mx-auto flex justify-between items-center">
+    <h1 class="text-xl font-bold" routerLink="/">My Blogs</h1>
+    {{ shareDataVar }}
+    <nav>
+      <ul class="flex space-x-4">
+        <li><a routerLink="/" class="hover:text-gray-200">Home</a></li>
+        <li><a routerLink="about-us" class="hover:text-gray-200">About</a></li>
+        <li><a routerLink="contact-us" class="hover:text-gray-200">Contact</a></li>
+
+        <!-- @if (!name) {
+          <li><a routerLink="login" class="hover:text-gray-200">Login</a></li>
+        } @else {
+          <li><a href="article" class="hover:text-gray-200">Post Article</a></li>
+          <li>{{ name }}</li>
+        } -->
+
+        @if (!name) {
+          <li>
+            <a routerLink="login" class="hover:text-gray-200">Login</a>
+          </li>
+        } @else {
+          @if (role !== 'Admin') {
+            <li>
+              <a routerLink="article" class="hover:text-gray-200">Post Article</a>
+            </li>
+          }
+
+          @if (role === 'Admin') {
+            <li>
+              <a routerLink="pending-articles" class="hover:text-gray-200">Articles</a>
+            </li>
+          }
+          <li>{{ name }}</li>
+        }
+      </ul>
+    </nav>
+  </div>
+</header>

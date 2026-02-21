@@ -1,0 +1,58 @@
+<div class="min-h-screen bg-gray-50 p-8">
+  <div class="max-w-5xl mx-auto">
+    <!-- <h1 class="text-4xl font-bold mb-8">All Blogs</h1> -->
+
+    <div class="space-y-6">
+      <!-- Blog Card -->
+      @for (item of blobs(); track $index) {
+        <div class="bg-white border rounded-lg shadow hover:shadow-lg transition p-6">
+          <h2 class="text-2xl font-semibold mb-2">{{ item.title }}</h2>
+          <p class="text-gray-600 mb-4">
+            {{ getExcerpt(item.content, 120) }}
+          </p>
+
+          <!-- Stats -->
+          <div class="flex items-center justify-between text-sm text-gray-500">
+            <div class="flex items-center space-x-4">
+              <!-- Likes -->
+              <span class="flex items-center space-x-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4 text-red-500"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    d="M3 8a5 5 0 0110 0v1h2a2 2 0 012 2v1a2 2 0 01-2 2h-2v4H7v-4H5a2 2 0 01-2-2V9a2 2 0 012-2h2V8z"
+                  />
+                </svg>
+                <span>{{ item.likesCount }} Likes</span>
+              </span>
+
+              <!-- Comments -->
+              <span class="flex items-center space-x-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4 text-blue-500"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    d="M18 10c0 3.866-3.582 7-8 7a8.96 8.96 0 01-4.9-1.5L2 17l1.5-3.1A7.96 7.96 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7z"
+                  />
+                </svg>
+                <span>{{ item.comments.length }} Comments</span>
+              </span>
+            </div>
+
+            <a [routerLink]="['/blog', item.id]" class="text-blue-600 hover:underline"
+              >Read More →</a
+            >
+          </div>
+        </div>
+      }
+
+      <!-- Repeat for other blogs -->
+    </div>
+  </div>
+</div>

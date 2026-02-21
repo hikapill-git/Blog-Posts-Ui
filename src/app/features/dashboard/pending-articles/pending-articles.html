@@ -1,0 +1,105 @@
+<!-- users-grid.component.html -->
+<div class="p-4">
+  <!-- Top bar with Add button -->
+  <div class="flex justify-end mb-4">
+    <select
+      [(ngModel)]="approvalStatus"
+      (change)="onApprovalChange($event)"
+      class="bg-white border border-gray-300 px-4 py-2 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+    >
+      <option value="all">All</option>
+      <option value="approved">Approved</option>
+      <option value="pending" [selected]="true">Pending</option>
+    </select>
+  </div>
+
+  <!-- Grid/Table -->
+  <div class="overflow-x-auto">
+    <table class="min-w-full border border-gray-300 rounded-lg shadow-sm">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="px-4 py-2 text-left border-b">Title</th>
+          <th class="px-4 py-2 text-left border-b">Content</th>
+
+          <th class="px-4 py-2 text-left border-b">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let article of articles$ | async" class="hover:bg-gray-50">
+          <td class="px-4 py-2 border-b">{{ article.title }}</td>
+          <td class="px-4 py-2 border-b">{{ article.content }}</td>
+
+          <td class="px-4 py-2 border-b">
+            <button
+              (click)="openEditModal(article)"
+              class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600 mr-2"
+            >
+              Edit
+            </button>
+            <button
+              (click)="openConfirm(article.id)"
+              class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal Popup -->
+  <div
+    *ngIf="showModal"
+    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+  >
+    <div class="bg-white rounded-lg shadow-lg p-6 w-96">
+      <h2 class="text-lg font-semibold mb-4">View Article</h2>
+      <form id="articleForm" [formGroup]="blogForm">
+        <!-- Display fields as labels -->
+        <div class="mb-4">
+          <label class="block font-medium">Title:</label>
+          <p class="border px-2 py-1 rounded bg-gray-100">{{ blogForm.get('title')?.value }}</p>
+        </div>
+
+        <div class="mb-4">
+          <label class="block font-medium">Content:</label>
+          <p class="border px-2 py-1 rounded bg-gray-100 whitespace-pre-line">
+            {{ blogForm.get('content')?.value }}
+          </p>
+        </div>
+
+        <!-- Radio buttons for approval -->
+        <div class="mb-4">
+          <label class="block font-medium mb-2">Approval Status:</label>
+          <div class="flex gap-4">
+            <label>
+              <input type="radio" formControlName="isApproved" [value]="true" />
+              Approved
+            </label>
+            <label>
+              <input type="radio" formControlName="isApproved" [value]="false" />
+              Not Approved
+            </label>
+          </div>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="flex justify-end gap-2">
+          <button (click)="closeModal()" class="bg-gray-300 px-3 py-1 rounded hover:bg-gray-400">
+            Close
+          </button>
+          <button
+            type="submit"
+            (click)="saveUser()"
+            class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+          >
+            Update
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<app-app-confirm-modal *ngIf="showConfirm" (confirmed)="handleConfirm($event)">
+</app-app-confirm-modal>

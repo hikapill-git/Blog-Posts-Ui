@@ -1,0 +1,63 @@
+<!-- Centering Div -->
+<div class="flex items-center justify-center min-h-screen">
+  <!-- Login Card -->
+  <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
+    <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
+
+    <!-- Login Form -->
+    <form [formGroup]="loginForm" id="signinForm" class="space-y-4">
+      <!-- Email -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Email</label>
+        <input
+          type="text"
+          formControlName="email"
+          class="w-full border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        @if (loginForm.get('email')?.touched) {
+          @if (loginForm.get('email')?.errors?.['required']) {
+            <p class="text-red-500 text-sm">Please enter email.</p>
+          }
+          @if (loginForm.get('email')?.errors?.['email']) {
+            <p class="text-red-500 text-sm">Please enter a valid email.</p>
+          }
+        }
+      </div>
+
+      <!-- Password -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Password</label>
+        <input
+          type="password"
+          formControlName="password"
+          class="w-full border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        @if (loginForm.get('password')?.touched) {
+          @if (loginForm.get('password')?.errors?.['required']) {
+            <p class="text-red-500 text-sm">Please enter password.</p>
+          }
+          @if (loginForm.get('password')?.errors?.['pattern']) {
+            <p class="text-red-500 text-sm">
+              Password must contain 8 digit, uppercase, lowercase, number & special character.
+            </p>
+          }
+        }
+      </div>
+      <!-- Error Message ABOVE Button -->
+      @if (errorMessage != '') {
+        <div class="text-red-500 text-sm font-medium text-center">
+          {{ errorMessage }}
+        </div>
+      }
+      <!-- Submit Button -->
+      <button
+        [disabled]="loginForm.invalid"
+        (click)="OnLogin()"
+        type="submit"
+        class="w-full bg-blue-600 text-white py-2 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-700"
+      >
+        Login
+      </button>
+    </form>
+  </div>
+</div>

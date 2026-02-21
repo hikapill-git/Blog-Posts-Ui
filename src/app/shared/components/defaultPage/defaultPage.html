@@ -1,0 +1,26 @@
+<section class="bg-gray-100 py-12">
+  <div class="max-w-4xl mx-auto text-center px-6">
+    <h1 class="text-4xl font-bold mb-4">Welcome to My Blog Platform</h1>
+    <p class="text-gray-700 mb-6">
+      A place to share your thoughts, read inspiring stories, and connect with a community of
+      writers and readers. Explore blogs, discover new ideas, and start your own journey today.
+    </p>
+    @if (!isLoggedIn) {
+      <a
+        routerLink="/register"
+        class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700"
+      >
+        Get Started
+      </a>
+    }
+  </div>
+</section>
+
+<!-- Articles Section -->
+<section class="py-12">
+  <div class="max-w-5xl mx-auto px-6">
+    <h2 class="text-3xl font-bold mb-6">All Blogs</h2>
+    <!-- Blog list component -->
+    <app-blogs></app-blogs>
+  </div>
+</section>

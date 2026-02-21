@@ -1,0 +1,27 @@
+<p>practice-root works!</p>
+<div>
+  <button type="submit" appChangeBtnColor>Submit</button>
+</div>
+<div *appIfLoggedIn="!showDiv">
+  <p style="color: green">Mouse is inside!</p>
+</div>
+
+<div #divData>hello</div>
+
+<app-test-componen></app-test-componen>
+<app-signal-example>
+  <p #desc>hello I am projected content</p>
+</app-signal-example>
+<input #myInput type="text" />
+<button (click)="showValue(myInput.value)">Show</button>
+@if (post) {
+  <div>
+    <h3>{{ post.title }}</h3>
+    <p>{{ post.body }}</p>
+  </div>
+}
+
+<input [formControl]="searchControl" placeholder="Search posts..." />
+<ul>
+  <li *ngFor="let post of results">{{ post.title }}</li>
+</ul>
