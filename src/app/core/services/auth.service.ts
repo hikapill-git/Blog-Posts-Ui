@@ -8,9 +8,9 @@ import { TokenService } from './token.service';
   providedIn: 'root',
 })
 export class AuthService {
-  // private apiUrl =
-  //   'https://blog-platform-fydbc3fmdaffbggk.centralindia-01.azurewebsites.net/api/auth/';
-  private apiUrl = 'http://localhost:5017/api/auth/';
+  private apiUrl =
+    'https://blog-platform-fydbc3fmdaffbggk.centralindia-01.azurewebsites.net/api/auth/';
+  //private apiUrl = 'http://localhost:5017/api/auth/';
   constructor(
     private http: HttpClient,
     private tokenService: TokenService,

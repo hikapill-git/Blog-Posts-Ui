@@ -12,10 +12,10 @@ import {
   providedIn: 'root',
 })
 export class ArticleService {
-  // private apiUrl =
-  //   'https://blog-platform-fydbc3fmdaffbggk.centralindia-01.azurewebsites.net/api/articles';
+  private apiUrl =
+    'https://blog-platform-fydbc3fmdaffbggk.centralindia-01.azurewebsites.net/api/articles';
 
-  private apiUrl = 'http://localhost:5017/api/articles';
+  //private apiUrl = 'http://localhost:5017/api/articles';
   constructor(private http: HttpClient) {}
 
   getByUserId(userId: number): Observable<articleResponse[]> {
