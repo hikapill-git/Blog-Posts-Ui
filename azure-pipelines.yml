@@ -1,0 +1,58 @@
+trigger:
+  - main  # This triggers the pipeline whenever you push to the 'main' branch
+
+pool:
+  vmImage: 'ubuntu-latest' # The Virtual Machine to run the code on (windows-latest also available)
+
+stages:
+# ----------------------
+# STAGE 1: BUILD (CI)
+# ----------------------
+- stage: Build
+  displayName: 'Build Stage'
+  jobs:
+  - job: BuildJob
+    steps:
+    # 1. Checkout code (happens automatically)
+    
+    # 2. Add your build tasks here based on your language. 
+    # Example for Node.js:
+    # - script: npm install
+    # - script: npm run build
+    
+    # Example for .NET:
+    # - task: DotNetCoreCLI@2
+    #   inputs:
+    #     command: 'build'
+    
+    # 3. Publish the build artifacts (So the Deploy stage can use them)
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(System.DefaultWorkingDirectory)' # Or specific dist/bin folder
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+
+# ----------------------
+# STAGE 2: DEPLOY (CD)
+# ----------------------
+- stage: Deploy
+  displayName: 'Deploy Stage'
+  dependsOn: Build # Waits for Build to finish
+  condition: succeeded()
+  jobs:
+  - deployment: DeployJob
+    environment: 'production' # You can create this environment in ADO under "Environments"
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          # 1. Download Artifacts (happens automatically in deployment jobs)
+
+          # 2. Deploy Task (Example: Azure Web App)
+          # Replace 'Azure-Subscription-Connection' with the name from Step 1
+          # - task: AzureWebApp@1
+          #   inputs:
+          #     azureSubscription: 'Azure-Subscription-Connection'
+          #     appType: 'webAppLinux'
+          #     appName: 'your-azure-web-app-name'
+          #     package: '$(Pipeline.Workspace)/drop/**/*.zip'
