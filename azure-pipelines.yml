@@ -8,7 +8,7 @@ steps:
 # 1. Install Node.js (Good practice to specify version)
 - task: NodeTool@0
   inputs:
-    versionSpec: '18.x' # Or 16.x, 20.x depending on your Angular version
+    versionSpec: '24.x' # Or 16.x, 20.x depending on your Angular version
   displayName: 'Install Node.js'
 
 # 2. Build the code
