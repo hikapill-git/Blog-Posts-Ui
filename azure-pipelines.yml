@@ -5,30 +5,40 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-# 1. Install Node.js (Good practice to specify version)
+# ------------------------------------------------------
+# 1. Install Node.js 20 (Required by your Angular version)
+# ------------------------------------------------------
 - task: NodeTool@0
   inputs:
-    versionSpec: '24.x' # Or 16.x, 20.x depending on your Angular version
-  displayName: 'Install Node.js'
+    versionSpec: '24.x'
+  displayName: 'Install Node.js 24'
 
-# 2. Build the code
+# ------------------------------------------------------
+# 2. Build the Angular Application
+#    This creates the 'dist' folder
+# ------------------------------------------------------
 - script: |
     npm install
     npm run build
   displayName: 'Build Angular App'
 
-# 3. Zip the files (CRITICAL FIX HERE)
+# ------------------------------------------------------
+# 3. Zip ONLY the built files (CRITICAL FIX)
+#    We look inside 'dist/blob-plateform' and zip those files.
+#    This puts index.html at the TOP of the zip.
+# ------------------------------------------------------
 - task: ArchiveFiles@2
   inputs:
-    # CHANGE THIS: Replace 'your-project-name' with the actual folder name inside dist
-    # Example: 'dist/blob-platform' 
+    # CHECK THIS PATH: If your build fails, change this to just 'dist'
     rootFolderOrFile: 'dist/blob-plateform' 
     includeRootFolder: false
     archiveType: 'zip'
     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
     replaceExistingArchive: true
 
-# 4. Publish
+# ------------------------------------------------------
+# 4. Publish the Artifact for Release
+# ------------------------------------------------------
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
