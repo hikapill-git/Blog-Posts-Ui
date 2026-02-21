@@ -37,22 +37,29 @@ stages:
 # ----------------------
 - stage: Deploy
   displayName: 'Deploy Stage'
-  dependsOn: Build # Waits for Build to finish
+  dependsOn: Build
   condition: succeeded()
   jobs:
   - deployment: DeployJob
-    environment: 'production' # You can create this environment in ADO under "Environments"
+    environment: 'production'
     strategy:
       runOnce:
         deploy:
           steps:
-          # 1. Download Artifacts (happens automatically in deployment jobs)
+          # --------------------------------------------------------
+          # FIX: We added this script so "steps" is not empty.
+          # --------------------------------------------------------
+          - script: |
+              echo "This is a placeholder for the deploy step."
+              echo "The pipeline is working!"
+            displayName: 'Run Dummy Deploy'
 
-          # 2. Deploy Task (Example: Azure Web App)
-          # Replace 'Azure-Subscription-Connection' with the name from Step 1
+          # When you are ready for the real deployment, remove the script above 
+          # and uncomment the task below (make sure indentation matches):
+          
           # - task: AzureWebApp@1
           #   inputs:
           #     azureSubscription: 'Azure-Subscription-Connection'
           #     appType: 'webAppLinux'
-          #     appName: 'your-azure-web-app-name'
+          #     appName: 'your-app-name'
           #     package: '$(Pipeline.Workspace)/drop/**/*.zip'
